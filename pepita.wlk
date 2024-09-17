@@ -1,4 +1,5 @@
 object pepita {
+	
 	var energia = 100
 	
 	method comer(comida) {
