@@ -1,5 +1,5 @@
 object pepita {
-	
+
 	var energia = 100
 	
 	method comer(comida) {
@@ -72,6 +72,18 @@ object roque {
 	method alimentar(alimento) {
 		ave.comer(alimento)
 		cenas = cenas + 1
+	}
+}
+
+object milena {
+	const property aves = #{}
+
+	method entrenarAve(ave) {
+		aves.add(ave)
+	}
+
+	method movilizar(distancia) {
+		aves.forEach({ave => ave.volar(distancia)})
 	}
 }
 
