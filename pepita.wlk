@@ -1,4 +1,5 @@
 object pepita {
+
 	var energia = 100
 	
 	method comer(comida) {
@@ -6,11 +7,20 @@ object pepita {
 	}
 	
 	method volar(distancia) {
-		energia = energia - 10 - distancia
+		self.puedeVolar(distancia)
+		energia = energia - self.energiaNecesaria(distancia)
 	}
 		
 	method energia() {
 		return energia
+	}	
+
+	method puedeVolar(distancia) {
+		return energia >= self.energiaNecesaria(distancia)
+	}
+
+	method energiaNecesaria(distancia) {
+		return  10 + distancia
 	}
 }
 
@@ -50,18 +60,25 @@ object pepon {
 	}
 		
 	method comer(comida) {
-		energia += energia + comida.energiaQueAporta() / 2
+		energia += comida.energiaQueAporta() / 2
 	}
 		
 	method volar(distancia) {
-		energia = energia - 20 - 2*distancia
+		self.puedeVolar(distancia)
+		energia = energia - self.energiaNecesaria(distancia)
 	}
-	
+
+	method puedeVolar(distancia) {
+		return energia >= self.energiaNecesaria(distancia)
+	}
+	method energiaNecesaria(distancia) {
+              return 20 + 2*distancia
+        }
 }
 
 object roque {
 	var ave = pepita
-	var cenas = 0;
+	var cenas = 0
 	
 	method ave(_ave) {
 		ave = _ave
@@ -72,5 +89,28 @@ object roque {
 		ave.comer(alimento)
 		cenas = cenas + 1
 	}
+}
+
+object milena {
+	const property aves = #{}
+
+	method entrenarAve(ave) {
+		aves.add(ave)
+	}
+
+	method movilizar(distancia) {
+		self.validarMovilizar(distancia)
+		aves.forEach({ave => ave.volar(distancia)}) }
+	}
+
+	method validarMovilizar(distancia) {
+		if (not self.puedeMovilizar(distancia)) {
+                           self.error("Una de las aves no tiene suficiente energia para movilizarse") 
+                       }
+	}
+
+        method puedeMovilizar(distancia){
+               return aves.all({ave => ave.puedeVolar(distancia)})
+        }
 }
 
