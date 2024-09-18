@@ -8,7 +8,7 @@ object pepita {
 	
 	method volar(distancia) {
 		self.puedeVolar(distancia)
-		energia = energia - 10 - distancia
+		energia = energia - self.energiaNecesaria(distancia)
 	}
 		
 	method energia() {
@@ -16,11 +16,11 @@ object pepita {
 	}	
 
 	method puedeVolar(distancia) {
-		return energia > self.energiaAGastar(distancia)
+		return energia >= self.energiaNecesaria(distancia)
 	}
 
-	method energiaAGastar(distancia) {
-		return energia - 10 - distancia
+	method energiaNecesaria(distancia) {
+		return  10 + distancia
 	}
 }
 
@@ -60,27 +60,25 @@ object pepon {
 	}
 		
 	method comer(comida) {
-		energia += energia + comida.energiaQueAporta() / 2
+		energia += comida.energiaQueAporta() / 2
 	}
 		
 	method volar(distancia) {
 		self.puedeVolar(distancia)
-		energia = energia - 20 - 2*distancia
+		energia = energia - self.energiaNecesaria(distancia)
 	}
 
 	method puedeVolar(distancia) {
-		return energia > self.energiaAGastar(distancia)
+		return energia >= self.energiaNecesaria(distancia)
 	}
-
-	method energiaAGastar(distancia) {
-		return energia - 20 - 2 * distancia //MAL PERO NO ME DOY CUENTA COMO HACERLO
-	}
-	
+	method energiaNecesaria(distancia) {
+              return 20 + 2*distancia
+        }
 }
 
 object roque {
 	var ave = pepita
-	var cenas = 0;
+	var cenas = 0
 	
 	method ave(_ave) {
 		ave = _ave
@@ -101,14 +99,18 @@ object milena {
 	}
 
 	method movilizar(distancia) {
-		if (not self.puedeMovilizar(distancia)) {
-			self.error("Una de las aves no tiene suficiente energia para movilizarse" )
-		} else {
+		self.validarMovilizar(distancia)
 		aves.forEach({ave => ave.volar(distancia)}) }
 	}
 
-	method puedeMovilizar(distancia) {
-		return aves.all({ave => ave.puedeVolar(distancia)})
+	method validarMovilizar(distancia) {
+		if (not self.puedeMovilizar(distancia)) {
+                           self.error("Una de las aves no tiene suficiente energia para movilizarse") 
+                       }
 	}
+
+        method puedeMovilizar(distancia){
+               return aves.all({ave => ave.puedeVolar(distancia)})
+        }
 }
 
